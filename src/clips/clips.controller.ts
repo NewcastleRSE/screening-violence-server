@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import {Controller, Get, HttpStatus, Req, Res} from '@nestjs/common';
 import { ClipsService } from './clips.service';
 import * as _ from 'lodash';
 
@@ -28,6 +28,18 @@ export class ClipsController {
     }
 
     // all clips for a location
+    @Get('clips/loc')
+    async getClipsForLocation(@Req() request, @Res() res) {
+       const location = request.query.loc;
+        this.clipsService.findAll().then((clips) => {
+           const matching = _.remove(clips, (o) => {
+               return o.location === location;
+           })
+            return res.status(HttpStatus.OK).json(matching);
+        })
+    }
+
+
 
     // all tags
 
