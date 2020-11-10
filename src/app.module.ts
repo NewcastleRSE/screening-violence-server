@@ -9,7 +9,7 @@ import { ClipsModule } from './clips/clips.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/screening'),
-    ClipsModule
+    ClipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
