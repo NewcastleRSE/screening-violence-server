@@ -56,5 +56,14 @@ export class ClipsController {
 
 
     // all clips for a tag
-
+    @Get('clips/tag')
+    async getClipsForTag(@Req() req, @Res() res) {
+        const tag = req.query.tag.toLowerCase();
+        this.clipsService.findAll().then((clips) => {
+            const matching = _.remove(clips, (o) => {
+                return o.tags.includes(tag);
+            })
+            return res.status(HttpStatus.OK).json(matching);
+        })
+    }
 }
