@@ -39,9 +39,21 @@ export class ClipsController {
         })
     }
 
-
-
     // all tags
+    @Get('tags')
+    async getAllTags(@Req() req, @Res() res) {
+        const tags = [];
+        this.clipsService.findAll().then((clips) => {
+            clips.forEach((clip) => {
+                clip.tags.forEach((tag) => {
+                    tags.push(tag);
+                })
+            })
+            return res.status(HttpStatus.OK).json(_.uniq(tags));
+        })
+    }
+
+
 
     // all clips for a tag
 
