@@ -73,3 +73,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
   Nest is [MIT licensed](LICENSE).
+  
+  ## Clip categories
+Any metadata you might want displayed outside of video e.g. film maker, duration, key info. Thumbnail for image search option. 
+For each language:
+location, tags, URL (sharing link from youtube), phrases.
+

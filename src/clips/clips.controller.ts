@@ -1,10 +1,14 @@
 import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { ClipsService } from './clips.service';
 import * as _ from 'lodash';
+import {LocsService} from "../locs/locs.service";
 
 @Controller('api')
 export class ClipsController {
-  constructor(private clipsService: ClipsService) {}
+  constructor(
+      private clipsService: ClipsService,
+       private locsService: LocsService
+  ) {}
 
   @Get('allclips')
   async getAllClips(@Res() res) {
@@ -21,6 +25,47 @@ export class ClipsController {
         locations.push(clip.location);
       });
       return res.status(HttpStatus.OK).json(_.uniq(locations));
+    });
+  }
+
+  @Get('locsInfo')
+  async getLocsWithInfo(@Res() res) {
+    const locations = [];
+    this.clipsService.findAll().then((clips) => {
+      clips.forEach((clip) => {
+        locations.push(clip.location);
+      });
+
+      // count number of occurances of each
+      let locMap = _.countBy(locations);
+
+      // get lat and long
+      this.locsService.findAll().then((locsInfo) => {
+
+        // make copy of list and add new parameter
+        let locationsObjects = [];
+        Object.keys(locsInfo).forEach((key) => {
+          locationsObjects[key] = locsInfo[key];
+        });
+        locationsObjects = locationsObjects.map((v) => {
+          const o = Object.assign({}, v);
+          o.appearances = 0;
+          return o;
+        });
+
+        // update appearances if present
+        for (let i = 0; i < locationsObjects.length; i++) {
+          const locName = locationsObjects[i].name;
+          const appears = locMap[locName];
+
+          if (appears != undefined) {
+            locationsObjects[i].appearances = appears;
+          }
+        }
+        return res.status(HttpStatus.OK).json(locationsObjects);
+      })
+
+
     });
   }
 
