@@ -30,7 +30,6 @@ export class ClipsController {
 
   @Get('locsInfo')
   async getLocsWithInfo(@Res() res) {
-    console.log('get locs info endpoint')
     const locations = [];
     this.clipsService.findAll().then((clips) => {
       clips.forEach((clip) => {
@@ -76,9 +75,7 @@ export class ClipsController {
         }
 
         return res.status(HttpStatus.OK).json(listToReturn);
-      })
-
-
+      });
     });
   }
 
@@ -104,7 +101,7 @@ export class ClipsController {
           tags.push(tag);
         });
       });
-      return res.status(HttpStatus.OK).json(_.uniq(tags));
+      return res.status(HttpStatus.OK).json(_.countBy(tags));
     });
   }
 
