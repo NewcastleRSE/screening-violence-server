@@ -30,6 +30,7 @@ export class ClipsController {
 
   @Get('locsInfo')
   async getLocsWithInfo(@Res() res) {
+    console.log('get locs info endpoint')
     const locations = [];
     this.clipsService.findAll().then((clips) => {
       clips.forEach((clip) => {
@@ -53,16 +54,28 @@ export class ClipsController {
           return o;
         });
 
+        const listToReturn = [];
         // update appearances if present
         for (let i = 0; i < locationsObjects.length; i++) {
-          const locName = locationsObjects[i].name;
+          const locName = locationsObjects[i]._doc.name;
+          const lat = locationsObjects[i]._doc.lat;
+           const   long = locationsObjects[i]._doc.long;
           const appears = locMap[locName];
 
           if (appears != undefined) {
             locationsObjects[i].appearances = appears;
           }
+
+          const locObject = {
+            name: locName,
+            lat,
+            long,
+            appearances: locationsObjects[i].appearances,
+          }
+          listToReturn.push(locObject);
         }
-        return res.status(HttpStatus.OK).json(locationsObjects);
+
+        return res.status(HttpStatus.OK).json(listToReturn);
       })
 
 
