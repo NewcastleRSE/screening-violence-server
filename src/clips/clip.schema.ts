@@ -16,6 +16,12 @@ export class Clip {
     location: string;
 
     @Prop()
+    filmmaker: string;
+
+    @Prop()
+    duration: Types.Decimal128;
+
+    @Prop()
     tags: [string];
 }
 
