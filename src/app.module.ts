@@ -17,6 +17,7 @@ dotenv.config();
     ClipsModule,
     LocsModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
