@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import * as bodyParser from 'body-parser';
-dotenv.config();
+
 
 // checks required env variables are set
 async function loadEnvVars() {
