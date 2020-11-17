@@ -36,6 +36,6 @@ async function bootstrap() {
 }
 
 loadEnvVars().then(() => {
-  console.log('load envs');
+  console.log('loaded envs');
   bootstrap();
 });

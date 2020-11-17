@@ -47,6 +47,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 Alternatively, run in docker: ```docker build -t sv-server .``` and ```docker run -d -p 3000:3000 sv-server```
+When connecting to mongodb running locally: ```DB_CONNECTION_STRING = "mongodb://host.docker.internal:27017/screening"```
 
 
 ## Test
