@@ -30,7 +30,7 @@ async function bootstrap() {
     app.enableCors();
     await app.listen(3000);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     console.log(process.env.DB_CONNECTION_STRING);
   }
 }
