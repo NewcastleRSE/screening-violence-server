@@ -10,6 +10,9 @@ export class Loc {
     name: string;
 
     @Prop()
+    displayName: string;
+
+    @Prop()
     lat: string;
 
     @Prop()

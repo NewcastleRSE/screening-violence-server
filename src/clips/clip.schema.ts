@@ -10,10 +10,16 @@ export class Clip {
    name: string;
 
     @Prop()
+    shortid: string;
+
+    @Prop()
     url: string;
 
     @Prop()
     location: string;
+
+    @Prop()
+    displayLocation: string;
 
     @Prop()
     filmmaker: string;
@@ -23,6 +29,7 @@ export class Clip {
 
     @Prop()
     tags: [string];
+
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);

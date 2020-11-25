@@ -1,19 +1,42 @@
 import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { ClipsService } from './clips.service';
 import * as _ from 'lodash';
-import {LocsService} from "../locs/locs.service";
+import { LocsService } from '../locs/locs.service';
 
 @Controller('api')
 export class ClipsController {
   constructor(
-      private clipsService: ClipsService,
-       private locsService: LocsService
+    private clipsService: ClipsService,
+    private locsService: LocsService,
   ) {}
+
+  // todo add error handling if can't find request
 
   @Get('allclips')
   async getAllClips(@Res() res) {
     const clips = await this.clipsService.findAll();
     return res.status(HttpStatus.OK).json(clips);
+  }
+
+  // clips by short id
+  @Get('clips/shortid')
+  async getClipsForShortId(@Req() request, @Res() res) {
+    let found = false;
+    this.clipsService.findAll().then((clips) => {
+      const id = request.query.shortid;
+      clips.forEach((clip) => {
+        if (clip.shortid === id) {
+          found = true;
+          console.log('found is true');
+          return res.status(HttpStatus.OK).json(clip);
+        }
+      });
+
+      if (found === false) {
+        console.log('found is not true');
+        return res.status(HttpStatus.OK);
+      }
+    });
   }
 
   // all locations
@@ -37,11 +60,10 @@ export class ClipsController {
       });
 
       // count number of occurances of each
-      let locMap = _.countBy(locations);
+      const locMap = _.countBy(locations);
 
       // get lat and long
       this.locsService.findAll().then((locsInfo) => {
-
         // make copy of list and add new parameter
         let locationsObjects = [];
         Object.keys(locsInfo).forEach((key) => {
@@ -56,21 +78,23 @@ export class ClipsController {
         const listToReturn = [];
         // update appearances if present
         for (let i = 0; i < locationsObjects.length; i++) {
-          const locName = locationsObjects[i]._doc.name;
+          const displayName = locationsObjects[i]._doc.displayName;
           const lat = locationsObjects[i]._doc.lat;
-           const   long = locationsObjects[i]._doc.long;
-          const appears = locMap[locName];
+          const long = locationsObjects[i]._doc.long;
+          const name = locationsObjects[i]._doc.name;
+          const appears = locMap[name];
 
           if (appears != undefined) {
             locationsObjects[i].appearances = appears;
           }
 
           const locObject = {
-            name: locName,
+            name,
+            displayName,
             lat,
             long,
             appearances: locationsObjects[i].appearances,
-          }
+          };
           listToReturn.push(locObject);
         }
 
@@ -83,6 +107,7 @@ export class ClipsController {
   @Get('clips/loc')
   async getClipsForLocation(@Req() request, @Res() res) {
     const location = request.query.loc;
+    console.log(location);
     this.clipsService.findAll().then((clips) => {
       const matching = _.remove(clips, (o) => {
         return o.location === location;
