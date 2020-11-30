@@ -30,6 +30,9 @@ export class Clip {
     @Prop()
     tags: [string];
 
+    @Prop()
+ thumbnail: string;
+
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);

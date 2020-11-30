@@ -27,7 +27,6 @@ export class ClipsController {
       clips.forEach((clip) => {
         if (clip.shortid === id) {
           found = true;
-          console.log('found is true');
           return res.status(HttpStatus.OK).json(clip);
         }
       });
