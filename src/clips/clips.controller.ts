@@ -173,15 +173,23 @@ export class ClipsController {
     });
   }
 
-  // // all clips for a tag
-  // @Get('clips/tag')
-  // async getClipsForTag(@Req() req, @Res() res) {
-  //   const tag = req.query.tag.toLowerCase();
-  //   this.clipsService.findAll().then((clips) => {
-  //     const matching = _.remove(clips, (o) => {
-  //       return o.tagsen.includes(tag);
-  //     });
-  //     return res.status(HttpStatus.OK).json(matching);
-  //   });
-  // }
+  // all clips for a tag
+  @Get('clips/tag')
+  async getClipsForTag(@Req() req, @Res() res) {
+    let language = req.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+
+    const tag = req.query.tag.toLowerCase();
+    this.clipsService.findAll(language).then((clips) => {
+      const matching = _.remove(clips, (o) => {
+        return o.tags.includes(tag);
+      });
+      return res.status(HttpStatus.OK).json(matching);
+    });
+  }
 }
