@@ -151,21 +151,28 @@ export class ClipsController {
       return res.status(HttpStatus.OK).json(matching);
     });
   }
-  //
-  // // all tagsen
-  // @Get('tagsen')
-  // async getAlltagsen(@Req() req, @Res() res) {
-  //   const tagsen = [];
-  //   this.clipsService.findAll().then((clips) => {
-  //     clips.forEach((clip) => {
-  //       clip.tagsen.forEach((tag) => {
-  //         tagsen.push(tag);
-  //       });
-  //     });
-  //     return res.status(HttpStatus.OK).json(_.countBy(tagsen));
-  //   });
-  // }
-  //
+
+  // all tags
+  @Get('tags')
+  async getAlltags(@Req() request, @Res() res) {
+    let language = request.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+    const tags = [];
+    this.clipsService.findAll(language).then((clips) => {
+      clips.forEach((clip) => {
+        clip.tags.forEach((tag) => {
+          tags.push(tag);
+        });
+      });
+      return res.status(HttpStatus.OK).json(_.countBy(tags));
+    });
+  }
+
   // // all clips for a tag
   // @Get('clips/tag')
   // async getClipsForTag(@Req() req, @Res() res) {
