@@ -14,13 +14,13 @@ export class ClipsController {
 
   @Get('allclips')
   async getAllClips(@Res() res, @Req() request) {
-    const language = request.query.lang;
+    let language = request.query.lang;
 
     // if not provided or an incorrect code
-    if (!language || (language !== 'en' || language !== 'es')) {
-      // default is english
-      const clips = await this.clipsService.findAll('en');
-      return res.status(HttpStatus.OK).json(clips);
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
     }
 
     else {
@@ -32,14 +32,23 @@ export class ClipsController {
 
   }
 
+  checkLanguageValid(language) {
+    const validLanguages = ['en', 'es'];
+    return _.includes(validLanguages, language);
+  }
+
   // clips by short id
   @Get('clips/shortid')
   async getClipsForShortId(@Req() request, @Res() res) {
     let language = request.query.lang;
+
     if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
       language = 'en';
     }
 
+    console.log(language);
     let found = false;
     this.clipsService.findAll(language).then((clips) => {
       const id = request.query.shortid;
@@ -121,18 +130,27 @@ export class ClipsController {
   //   });
   // }
   //
-  // // all clips for a location
-  // @Get('clips/loc')
-  // async getClipsForLocation(@Req() request, @Res() res) {
-  //   const location = request.query.loc;
-  //   console.log(location);
-  //   this.clipsService.findAll().then((clips) => {
-  //     const matching = _.remove(clips, (o) => {
-  //       return o.location === location;
-  //     });
-  //     return res.status(HttpStatus.OK).json(matching);
-  //   });
-  // }
+  // all clips for a location
+  @Get('clips/loc')
+  async getClipsForLocation(@Req() request, @Res() res) {
+    const location = request.query.loc;
+    let language = request.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+
+    // todo if location is undefined error handling
+
+    this.clipsService.findAll(language).then((clips) => {
+      const matching = _.remove(clips, (o) => {
+        return o.location === location;
+      });
+      return res.status(HttpStatus.OK).json(matching);
+    });
+  }
   //
   // // all tagsen
   // @Get('tagsen')
