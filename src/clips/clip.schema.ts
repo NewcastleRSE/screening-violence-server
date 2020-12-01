@@ -7,7 +7,10 @@ export class Clip {
    _id: Types.ObjectId;
 
    @Prop()
-   name: string;
+   nameen: string;
+
+ @Prop()
+ namees: string;
 
     @Prop()
     shortid: string;
@@ -19,7 +22,10 @@ export class Clip {
     location: string;
 
     @Prop()
-    displayLocation: string;
+    displayLocationen: string;
+
+ @Prop()
+ displayLocationes: string;
 
     @Prop()
     filmmaker: string;
@@ -28,7 +34,10 @@ export class Clip {
     duration: Types.Decimal128;
 
     @Prop()
-    tags: [string];
+    tagsen: [string];
+
+ @Prop()
+ tagses: [string];
 
     @Prop()
  thumbnail: string;
