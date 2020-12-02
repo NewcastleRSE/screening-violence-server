@@ -48,7 +48,6 @@ export class ClipsController {
       language = 'en';
     }
 
-    console.log(language);
     let found = false;
     this.clipsService.findAll(language).then((clips) => {
       const id = request.query.shortid;
@@ -65,71 +64,103 @@ export class ClipsController {
       }
     });
   }
-  //
-  // // all locations
-  // @Get('locs')
-  // async getAllLocations(@Res() res) {
-  //   const locations = [];
-  //   this.clipsService.findAll().then((clips) => {
-  //     clips.forEach((clip) => {
-  //       locations.push(clip.location);
-  //     });
-  //     return res.status(HttpStatus.OK).json(_.uniq(locations));
-  //   });
-  // }
-  //
-  // @Get('locsInfo')
-  // async getLocsWithInfo(@Res() res) {
-  //   const locations = [];
-  //   this.clipsService.findAll().then((clips) => {
-  //     clips.forEach((clip) => {
-  //       locations.push(clip.location);
-  //     });
-  //
-  //     // count number of occurances of each
-  //     const locMap = _.countBy(locations);
-  //
-  //     // get lat and long
-  //     this.locsService.findAll().then((locsInfo) => {
-  //       // make copy of list and add new parameter
-  //       let locationsObjects = [];
-  //       Object.keys(locsInfo).forEach((key) => {
-  //         locationsObjects[key] = locsInfo[key];
-  //       });
-  //       locationsObjects = locationsObjects.map((v) => {
-  //         const o = Object.assign({}, v);
-  //         o.appearances = 0;
-  //         return o;
-  //       });
-  //
-  //       const listToReturn = [];
-  //       // update appearances if present
-  //       for (let i = 0; i < locationsObjects.length; i++) {
-  //         const displayName = locationsObjects[i]._doc.displayName;
-  //         const lat = locationsObjects[i]._doc.lat;
-  //         const long = locationsObjects[i]._doc.long;
-  //         const name = locationsObjects[i]._doc.name;
-  //         const appears = locMap[name];
-  //
-  //         if (appears != undefined) {
-  //           locationsObjects[i].appearances = appears;
-  //         }
-  //
-  //         const locObject = {
-  //           name,
-  //           displayName,
-  //           lat,
-  //           long,
-  //           appearances: locationsObjects[i].appearances,
-  //         };
-  //         listToReturn.push(locObject);
-  //       }
-  //
-  //       return res.status(HttpStatus.OK).json(listToReturn);
-  //     });
-  //   });
-  // }
-  //
+
+  // all locations
+  @Get('locs')
+  async getAllLocations(@Res() res, @Req() request) {
+    let language = request.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+
+    const locations = [];
+    this.clipsService.findAll(language).then((clips) => {
+      clips.forEach((clip) => {
+        locations.push(clip.location);
+      });
+      return res.status(HttpStatus.OK).json(_.uniq(locations));
+    });
+  }
+
+  @Get('locsInfo')
+  async getLocsWithInfo(@Res() res, @Req() request) {
+    let language = request.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+
+    const locations = [];
+    this.clipsService.findAll(language).then((clips) => {
+      clips.forEach((clip) => {
+        locations.push(clip.location);
+      });
+
+      // count number of occurrences of each
+      const locMap = _.countBy(locations);
+
+      // get lat and long
+      this.locsService.findAll(language).then((locsInfo) => {
+        // make copy of list and add new parameter
+        let locationsObjects = [];
+        Object.keys(locsInfo).forEach((key) => {
+          locationsObjects[key] = locsInfo[key];
+        });
+        locationsObjects = locationsObjects.map((v) => {
+          const o = Object.assign({}, v);
+          o.appearances = 0;
+          return o;
+        });
+
+        const listToReturn = [];
+        // update appearances if present
+        for (let i = 0; i < locationsObjects.length; i++) {
+
+          let displayName;
+          let lat;
+          let long;
+          let name;
+          let appears;
+          if (locationsObjects[i].displayName) {
+            displayName = locationsObjects[i].displayName;
+          }
+         if (locationsObjects[i].lat) {
+            lat = locationsObjects[i].lat;
+         }
+          if (locationsObjects[i].long) {
+            long = locationsObjects[i].long;
+          }
+         if (locationsObjects[i].name) {
+           name = locationsObjects[i].name;
+         }
+          if (locMap[name]) {
+            appears = locMap[name];
+          }
+
+          if (appears != undefined) {
+            locationsObjects[i].appearances = appears;
+          }
+
+          const locObject = {
+            name,
+            displayName,
+            lat,
+            long,
+            appearances: locationsObjects[i].appearances,
+          };
+          listToReturn.push(locObject);
+        }
+
+        return res.status(HttpStatus.OK).json(listToReturn);
+      });
+    });
+  }
+
   // all clips for a location
   @Get('clips/loc')
   async getClipsForLocation(@Req() request, @Res() res) {
