@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import {Controller, Get, HttpException, HttpStatus, NotFoundException, Req, Res} from '@nestjs/common';
 import { ClipsService } from './clips.service';
 import * as _ from 'lodash';
 import { LocsService } from '../locs/locs.service';
@@ -21,15 +21,10 @@ export class ClipsController {
       language = 'en';
     } else if (!this.checkLanguageValid(language)) {
       language = 'en';
-    }
-
-    else {
+    } else {
       const clips = await this.clipsService.findAll(language);
       return res.status(HttpStatus.OK).json(clips);
     }
-
-
-
   }
 
   checkLanguageValid(language) {
@@ -120,7 +115,6 @@ export class ClipsController {
         const listToReturn = [];
         // update appearances if present
         for (let i = 0; i < locationsObjects.length; i++) {
-
           let displayName;
           let lat;
           let long;
@@ -129,15 +123,15 @@ export class ClipsController {
           if (locationsObjects[i].displayName) {
             displayName = locationsObjects[i].displayName;
           }
-         if (locationsObjects[i].lat) {
+          if (locationsObjects[i].lat) {
             lat = locationsObjects[i].lat;
-         }
+          }
           if (locationsObjects[i].long) {
             long = locationsObjects[i].long;
           }
-         if (locationsObjects[i].name) {
-           name = locationsObjects[i].name;
-         }
+          if (locationsObjects[i].name) {
+            name = locationsObjects[i].name;
+          }
           if (locMap[name]) {
             appears = locMap[name];
           }
@@ -164,8 +158,18 @@ export class ClipsController {
   // all clips for a location
   @Get('clips/loc')
   async getClipsForLocation(@Req() request, @Res() res) {
+    if (!request.query.loc || !request.query.lang) {
+     throw new HttpException('Missing query parameter', HttpStatus.BAD_REQUEST);
+    }
     const location = request.query.loc;
     let language = request.query.lang;
+
+    if (location === undefined) {
+      throw new HttpException(
+        'Missing query parameter',
+        HttpStatus.BAD_REQUEST
+      );
+    }
 
     if (!language) {
       language = 'en';
@@ -173,12 +177,13 @@ export class ClipsController {
       language = 'en';
     }
 
-    // todo if location is undefined error handling
+
 
     this.clipsService.findAll(language).then((clips) => {
       const matching = _.remove(clips, (o) => {
         return o.location === location;
       });
+
       return res.status(HttpStatus.OK).json(matching);
     });
   }
