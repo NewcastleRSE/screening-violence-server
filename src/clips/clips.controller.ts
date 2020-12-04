@@ -221,11 +221,13 @@ export class ClipsController {
       language = 'en';
     }
 
-    const tag = req.query.tag.toLowerCase();
+    const tag = req.query.tag;
+    console.log(tag);
     this.clipsService.findAll(language).then((clips) => {
       const matching = _.remove(clips, (o) => {
         return o.tags.includes(tag);
       });
+
       return res.status(HttpStatus.OK).json(matching);
     });
   }
