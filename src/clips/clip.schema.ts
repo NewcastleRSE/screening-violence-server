@@ -42,6 +42,12 @@ export class Clip {
     @Prop()
  thumbnail: string;
 
+    @Prop()
+    descriptionen: string;
+
+    @Prop()
+    descriptiones: string;
+
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);

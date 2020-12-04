@@ -23,7 +23,7 @@ export class ClipsService {
     }
 
 
-
+// NOTE update this method when adding any new fields available in different languages
     buildLanguageSpecificClip(clip, language) {
         // build language specific clip
 
@@ -31,6 +31,7 @@ export class ClipsService {
         let name = clip.nameen;
         let tags = clip.tagsen;
         let displayLocation = clip.displayLocationen;
+        let description = clip.descriptionen;
 
         // change for Spanish
         if (language === 'es') {
@@ -42,6 +43,9 @@ export class ClipsService {
             }
             if (clip.displayLocationes) {
                 displayLocation = clip.displayLocationes;
+            }
+            if (clip.descriptiones) {
+                displayLocation = clip.descriptiones;
             }
         }
 
@@ -57,7 +61,8 @@ export class ClipsService {
             filmmaker: clip.filmmaker,
             duration: clip.duration,
             tags,
-            thumbnail: clip.thumbnail
+            thumbnail: clip.thumbnail,
+           description
         }
 
 

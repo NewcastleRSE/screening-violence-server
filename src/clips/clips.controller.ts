@@ -27,6 +27,7 @@ export class ClipsController {
     }
   }
 
+  // test against expected languages
   checkLanguageValid(language) {
     const validLanguages = ['en', 'es'];
     return _.includes(validLanguages, language);

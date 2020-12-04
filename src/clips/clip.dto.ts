@@ -11,4 +11,5 @@ export class ClipDto {
   duration: number;
   tags: [string];
   thumbnail: string;
+ description: string;
 }
