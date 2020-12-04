@@ -45,7 +45,7 @@ export class ClipsService {
                 displayLocation = clip.displayLocationes;
             }
             if (clip.descriptiones) {
-                displayLocation = clip.descriptiones;
+                description = clip.descriptiones;
             }
         }
 
