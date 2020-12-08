@@ -63,8 +63,7 @@ export class ClipsController {
       });
 
       if (found === false) {
-        console.log('found is not true');
-        return res.status(HttpStatus.OK);
+        throw new HttpException('ID does not exist', HttpStatus.NOT_FOUND);
       }
     });
   }
