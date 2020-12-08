@@ -70,3 +70,19 @@ Any metadata you might want displayed outside of video e.g. film maker, duration
 For each language:
 location, tags, URL (sharing link from youtube), phrases.
 
+## Inserting CSV data into MongoDB locally
+Using mongodb shell to convert csv inputted list into an array (list must be separated by full stops with no spaces)
+https://stackoverflow.com/questions/43699098/mongoimport-csv-file-that-contains-a-column-with-array-values
+
+1. Create .tsv file. Save excel file as tab delimited .txt, then change filename to .tsv in explorer
+2. Import .tsv file. From cmd NOT mongo shell run : `mongoimport -d screening -c clips --type tsv --headerline C:\Users\nkc124\Desktop\SVDatav2.tsv`
+3. Convert list into array. In mongodb shell run:
+
+```use screening```
+
+```db.clips.find().forEach(function (el) {  var str = JSON.stringify(el.tagsen); var list = str.split('.'); list[0]=list[0].replace('"',''); list[list.length-1] = list[list.length-1].replace('"',''); el.tagsen = list;  db.clips.save(el);});```
+
+
+This example is for tagsen - add similar for each field that is a list
+
+
