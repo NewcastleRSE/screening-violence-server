@@ -1,4 +1,12 @@
-import {Controller, Get, HttpException, HttpStatus, NotFoundException, Req, Res} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { ClipsService } from './clips.service';
 import * as _ from 'lodash';
 import { LocsService } from '../locs/locs.service';
@@ -160,7 +168,10 @@ export class ClipsController {
   @Get('clips/loc')
   async getClipsForLocation(@Req() request, @Res() res) {
     if (!request.query.loc || !request.query.lang) {
-     throw new HttpException('Missing query parameter', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Missing query parameter',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const location = request.query.loc;
     let language = request.query.lang;
@@ -168,7 +179,7 @@ export class ClipsController {
     if (location === undefined) {
       throw new HttpException(
         'Missing query parameter',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -177,8 +188,6 @@ export class ClipsController {
     } else if (!this.checkLanguageValid(language)) {
       language = 'en';
     }
-
-
 
     this.clipsService.findAll(language).then((clips) => {
       const matching = _.remove(clips, (o) => {
