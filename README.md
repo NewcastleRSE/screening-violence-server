@@ -71,7 +71,7 @@ For each language:
 location, tags, URL (sharing link from youtube), phrases.
 
 ## Inserting CSV data into MongoDB locally
-Using mongodb shell to convert csv inputted list into an array (list must be separated by full stops with no spaces)
+Using mongodb shell to convert csv inputted list into an array
 https://stackoverflow.com/questions/43699098/mongoimport-csv-file-that-contains-a-column-with-array-values
 
 1. Create .tsv file. Save excel file as tab delimited .txt, then change filename to .tsv in explorer
@@ -80,9 +80,10 @@ https://stackoverflow.com/questions/43699098/mongoimport-csv-file-that-contains-
 
 ```use screening```
 
-```db.clips.find().forEach(function (el) {  var str = JSON.stringify(el.tagsen); var list = str.split('.'); list[0]=list[0].replace('"',''); list[list.length-1] = list[list.length-1].replace('"',''); el.tagsen = list;  db.clips.save(el);});```
+```db.clips.find().forEach(function (el) {  var str = JSON.stringify(el.tagsen); var list = str.split(' ,'); list[0]=list[0].replace('"',''); list[list.length-1] = list[list.length-1].replace('"',''); el.tagsen = list;  db.clips.save(el);});```
 
 
 This example is for tagsen - add similar for each field that is a list
 
 
+db.clips.find().forEach(function (el) {  var str = JSON.stringify(el.tagsen); var list = str.split(' ,'); list[0]=list[0].replace('"',''); list[list.length-1] = list[list.length-1].replace('"',''); el.tagsen = list;  db.clips.save(el);});

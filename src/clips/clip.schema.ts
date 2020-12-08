@@ -4,50 +4,49 @@ export type ClipDocument = Clip & Document;
 
 @Schema()
 export class Clip {
-   _id: Types.ObjectId;
+  _id: Types.ObjectId;
 
-   @Prop()
-   nameen: string;
+  @Prop()
+  nameen: string;
 
- @Prop()
- namees: string;
+  @Prop()
+  namees: string;
 
-    @Prop()
-    shortid: string;
+  @Prop()
+  shortid: string;
 
-    @Prop()
-    url: string;
+  @Prop()
+  url: string;
 
-    @Prop()
-    location: string;
+  @Prop()
+  location: string;
 
-    @Prop()
-    displayLocationen: string;
+  @Prop()
+  displayLocationen: string;
 
- @Prop()
- displayLocationes: string;
+  @Prop()
+  displayLocationes: string;
 
-    @Prop()
-    filmmaker: string;
+  @Prop()
+  filmmaker: string;
 
-    @Prop()
-    duration: Types.Decimal128;
+  @Prop()
+  duration: Types.Decimal128;
 
-    @Prop()
-    tagsen: [string];
+  @Prop()
+  tagsen: [string];
 
- @Prop()
- tagses: [string];
+  @Prop()
+  tagses: [string];
 
-    @Prop()
- thumbnail: string;
+  @Prop()
+  thumbnail: string;
 
-    @Prop()
-    descriptionen: string;
+  @Prop()
+  descriptionen: string;
 
-    @Prop()
-    descriptiones: string;
-
+  @Prop()
+  descriptiones: string;
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);
