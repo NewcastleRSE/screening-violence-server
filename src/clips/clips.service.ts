@@ -44,6 +44,22 @@ export class ClipsService {
       }
     }
 
+    // change for French
+    if (language === 'fr') {
+      if (clip.namefr) {
+        name = clip.namefr;
+      }
+      if (clip.tagsfr) {
+        tags = clip.tagsfr;
+      }
+      if (clip.displayLocationfr) {
+        displayLocation = clip.displayLocationfr;
+      }
+      if (clip.descriptionfr) {
+        description = clip.descriptionfr;
+      }
+    }
+
     // build dto
     const langSpecificClip = {
       _id: clip._id,

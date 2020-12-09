@@ -13,6 +13,9 @@ export class Clip {
   namees: string;
 
   @Prop()
+  namefr: string;
+
+  @Prop()
   shortid: string;
 
   @Prop()
@@ -28,6 +31,9 @@ export class Clip {
   displayLocationes: string;
 
   @Prop()
+  displayLocationfr: string;
+
+  @Prop()
   filmmaker: string;
 
   @Prop()
@@ -35,6 +41,9 @@ export class Clip {
 
   @Prop()
   tagsen: [string];
+
+  @Prop()
+  tagsfr: [string];
 
   @Prop()
   tagses: [string];
@@ -47,6 +56,9 @@ export class Clip {
 
   @Prop()
   descriptiones: string;
+
+  @Prop()
+  descriptionfr: string;
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);
