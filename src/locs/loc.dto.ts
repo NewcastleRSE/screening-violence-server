@@ -6,4 +6,5 @@ export class LocDto {
     displayName: string;
     lat: string;
     long: string;
+    description: string;
 }

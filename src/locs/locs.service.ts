@@ -20,13 +20,29 @@ export class LocsService {
   buildLanguageSpecificLoc(loc, language) {
     // default is english
     let displayName = loc.displayNameen;
+  let description = loc.descriptionen;
 
     // change for Spanish
     if (language === 'es') {
       if (loc.displayNamees) {
         displayName = loc.displayNamees;
       }
+
+      if (loc.descriptiones) {
+        description = loc.descriptiones;
+      }
     }
+
+    // change for French
+    if (language === 'fr') {
+      if (loc.displayNamefr) {
+        displayName = loc.displayNamefr;
+      }
+      if (loc.descriptionfr) {
+        description = loc.descriptionfr;
+      }
+    }
+
 
     // build dto
     const langSpecificLoc = {
@@ -35,6 +51,7 @@ export class LocsService {
       displayName,
       lat: loc.lat,
       long: loc.long,
+      description
     };
 
     return langSpecificLoc;

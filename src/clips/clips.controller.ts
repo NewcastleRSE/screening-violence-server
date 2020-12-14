@@ -18,8 +18,6 @@ export class ClipsController {
     private locsService: LocsService,
   ) {}
 
-  // todo add error handling if can't find request
-
   @Get('allclips')
   async getAllClips(@Res() res, @Req() request) {
     let language = request.query.lang;
@@ -109,6 +107,7 @@ export class ClipsController {
 
       // get lat and long
       this.locsService.findAll(language).then((locsInfo) => {
+        // console.log(locsInfo)
         // make copy of list and add new parameter
         let locationsObjects = [];
         Object.keys(locsInfo).forEach((key) => {
@@ -128,8 +127,12 @@ export class ClipsController {
           let long;
           let name;
           let appears;
+          let description;
           if (locationsObjects[i].displayName) {
             displayName = locationsObjects[i].displayName;
+          }
+          if (locationsObjects[i].description) {
+            description = locationsObjects[i].description;
           }
           if (locationsObjects[i].lat) {
             lat = locationsObjects[i].lat;
@@ -154,7 +157,9 @@ export class ClipsController {
             lat,
             long,
             appearances: locationsObjects[i].appearances,
+            description,
           };
+
           listToReturn.push(locObject);
         }
 

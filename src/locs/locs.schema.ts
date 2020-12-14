@@ -16,10 +16,22 @@ export class Loc {
     displayNamees: string;
 
     @Prop()
+    displayNamefr: string;
+
+    @Prop()
     lat: string;
 
     @Prop()
     long: string;
+
+    @Prop()
+    descriptionen: string;
+
+    @Prop()
+    descriptiones: string;
+
+    @Prop()
+    descriptionfr: string;
 }
 
 export const LocSchema = SchemaFactory.createForClass(Loc);
