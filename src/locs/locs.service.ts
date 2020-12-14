@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Loc, LocDocument } from './locs.schema';
 import { Model } from 'mongoose';
 import { LocDto } from './loc.dto';
+import * as _ from 'lodash';
 
 @Injectable()
 export class LocsService {
@@ -15,6 +16,16 @@ export class LocsService {
       langSpecificLocs.push(this.buildLanguageSpecificLoc(loc, language));
     });
     return langSpecificLocs;
+  }
+
+  async getDescriptionForLoc(language, loc) {
+    const all = await this.findAll(language);
+    const locList = _.remove(all, (o) => {
+      return o.name === loc;
+    })
+    if (locList[0]) {
+      return locList[0].description;
+    }
   }
 
   buildLanguageSpecificLoc(loc, language) {

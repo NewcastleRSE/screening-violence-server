@@ -168,6 +168,32 @@ export class ClipsController {
     });
   }
 
+  // description for single location
+  @Get('locDesc')
+  async getInfoForSingleLoc(@Req() request, @Res() res) {
+    if (!request.query.loc || !request.query.lang) {
+      throw new HttpException(
+          'Missing query parameter',
+          HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    let language = request.query.lang;
+
+    if (!language) {
+      language = 'en';
+    } else if (!this.checkLanguageValid(language)) {
+      language = 'en';
+    }
+
+    let location = request.query.loc;
+
+    const desc = await this.locsService.getDescriptionForLoc(language, location);
+    return res
+      .status(HttpStatus.OK)
+      .json(desc);
+  }
+
   // all clips for a location
   @Get('clips/loc')
   async getClipsForLocation(@Req() request, @Res() res) {
